@@ -69,7 +69,8 @@ class SettingsTest {
         Settings s = shipped();
         assertEquals(20, s.maxPower());
         assertEquals(List.of(5, 10, 15, 20, 30), s.costs().xpLevels());
-        assertEquals(List.of(1, 2, 3, 4, 5), s.costs().lapis());
+        assertEquals(List.of(0, 0, 0, 0, 0), s.costs().lapis());   // XP only, like Hypixel
+        assertFalse(s.lapisRefund().enabled());
         assertEquals("enchanting", s.skillId());
         assertEquals("3.5 * %levels% ^ 1.5", s.skillReward().amount());
         assertEquals("enchanter", s.jobReward().job());
