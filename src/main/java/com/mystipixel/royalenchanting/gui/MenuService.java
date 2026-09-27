@@ -313,6 +313,7 @@ public final class MenuService {
         player.giveExpLevels(-result.xpCost());
         TableService.takeLapis(player, result.lapisCost());
         menu.setInput(changed);
+        refund(player, settings, state.skillLevel(), result.xpCost(), result.lapisCost());
 
         boolean apply = result.action() == LevelCheck.Action.APPLY;
         String shown = entry.name() + " " + Roman.of(level);
@@ -322,6 +323,24 @@ public final class MenuService {
         plugin.rewards().reward(player, settings, new RewardService.Enchanting(apply ? "apply" : "remove",
                 entry.id(), entry.name(), level, result.xpCost(), result.lapisCost()));
         render(player, menu);
+    }
+
+    /** The Reimbursement and Overcompensation perks: a chance, by Enchanting level, to get the cost back. */
+    private void refund(Player player, Settings settings, int skillLevel, int xp, int lapis) {
+        var random = java.util.concurrent.ThreadLocalRandom.current();
+        try {
+            if (xp > 0 && settings.xpRefund().hits(skillLevel, random.nextDouble(100))) {
+                player.giveExpLevels(xp);
+                messages().send(player, "refund-xp", "xp", Integer.toString(xp));
+            }
+            if (lapis > 0 && settings.lapisRefund().hits(skillLevel, random.nextDouble(100))) {
+                var left = player.getInventory().addItem(new ItemStack(org.bukkit.Material.LAPIS_LAZULI, lapis));
+                left.values().forEach(stack -> player.getWorld().dropItemNaturally(player.getLocation(), stack));
+                messages().send(player, "refund-lapis", "lapis", Integer.toString(lapis));
+            }
+        } catch (IllegalArgumentException e) {
+            plugin.getLogger().warning("Bad refund chance formula: " + e.getMessage());
+        }
     }
 
     private void sendProblem(Player player, TableEntry entry, LevelCheck.Result result) {

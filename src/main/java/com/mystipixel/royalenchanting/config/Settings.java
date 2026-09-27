@@ -51,6 +51,8 @@ public final class Settings {
     private final SkillReward skillReward;
     private final JobReward jobReward;
     private final List<String> commands;
+    private final com.mystipixel.royalenchanting.logic.Refund xpRefund;
+    private final com.mystipixel.royalenchanting.logic.Refund lapisRefund;
     private final Sounds sounds;
     private final Map<String, TableEntry> entries;
 
@@ -91,6 +93,8 @@ public final class Settings {
                 config.getString("rewards.job.money", "%levels% * %job_level% * 0.5"),
                 config.getString("rewards.job.xp", "%levels% * 0.5"));
         this.commands = List.copyOf(config.getStringList("rewards.commands"));
+        this.xpRefund = refund(config, "refunds.xp", 10, "(%skill% - 9) * 0.5");
+        this.lapisRefund = refund(config, "refunds.lapis", 20, "(%skill% - 19) * 0.75");
         this.sounds = new Sounds(
                 config.getString("sounds.success", "block.enchantment_table.use"),
                 config.getString("sounds.fail", "entity.villager.no"),
@@ -182,6 +186,25 @@ public final class Settings {
 
     public boolean showDescriptions() {
         return showDescriptions;
+    }
+
+    private static com.mystipixel.royalenchanting.logic.Refund refund(FileConfiguration config, String path,
+                                                                      int minSkill, String chance) {
+        if (!config.isConfigurationSection(path)) {
+            return com.mystipixel.royalenchanting.logic.Refund.NONE;
+        }
+        return new com.mystipixel.royalenchanting.logic.Refund(
+                config.getBoolean(path + ".enabled", true),
+                config.getInt(path + ".min-skill", minSkill),
+                config.getString(path + ".chance", chance));
+    }
+
+    public com.mystipixel.royalenchanting.logic.Refund xpRefund() {
+        return xpRefund;
+    }
+
+    public com.mystipixel.royalenchanting.logic.Refund lapisRefund() {
+        return lapisRefund;
     }
 
     public SkillReward skillReward() {

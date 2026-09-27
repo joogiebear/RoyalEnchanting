@@ -82,6 +82,18 @@ there and any PlaceholderAPI placeholder.
 
 ---
 
+## Refunds
+
+Two chances to get an enchant's cost back, by Enchanting level, in `refunds:` (config.yml). They stand in
+for EcoSkills' Reimbursement and Overcompensation perks, whose effects only hook the vanilla table:
+
+| Refund | From | Chance |
+| --- | --- | --- |
+| XP levels (Reimbursement) | Enchanting 10 | 0.5% per level from 10 (20.5% at 50) |
+| Lapis (Overcompensation) | Enchanting 20 | 0.75% per level from 20 (23.25% at 50) |
+
+Rewards (skill XP, job pay) are still given for a refunded enchant.
+
 ## Configuration
 
 ### enchants.yml

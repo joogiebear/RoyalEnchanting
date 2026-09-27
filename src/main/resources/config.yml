@@ -48,6 +48,18 @@ rewards:
   # %skill_xp%, %job_money%, %job_xp%, and PlaceholderAPI.
   commands: []
 
+# A chance to get an enchant's cost back, by Enchanting level (%skill%). These replace EcoSkills'
+# Reimbursement and Overcompensation perks, which only hook the vanilla table. chance is a percentage.
+refunds:
+  xp:
+    enabled: true
+    min-skill: 10
+    chance: "(%skill% - 9) * 0.5"      # Reimbursement: 0.5% per level from Enchanting 10
+  lapis:
+    enabled: true
+    min-skill: 20
+    chance: "(%skill% - 19) * 0.75"    # Overcompensation: 0.75% per level from Enchanting 20
+
 # Extra enchants never to offer, whatever enchants.yml says. Fortune, Looting and Luck of the Sea are
 # always blocked and need not be listed.
 blocked-enchants: []
