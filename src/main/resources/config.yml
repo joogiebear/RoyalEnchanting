@@ -11,7 +11,7 @@ bookshelf-power:
 # have entries (at most 10), so with five entries nothing goes above V.
 costs:
   xp-levels: [5, 10, 15, 20, 30]
-  lapis: [1, 2, 3, 4, 5]
+  lapis: [0, 0, 0, 0, 0]   # no lapis cost (Hypixel charges XP only)
 
 # The skill whose level the requirements in enchants.yml ask for.
 skill:
@@ -56,7 +56,7 @@ refunds:
     min-skill: 10
     chance: "(%skill% - 9) * 0.5"      # Reimbursement: 0.5% per level from Enchanting 10
   lapis:
-    enabled: true
+    enabled: false   # the table costs no lapis, so there is nothing to refund
     min-skill: 20
     chance: "(%skill% - 19) * 0.75"    # Overcompensation: 0.75% per level from Enchanting 20
 

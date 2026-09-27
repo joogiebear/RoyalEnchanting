@@ -38,7 +38,8 @@ ones share one table. Part of the Royal plugin suite.
   Closing the menu, logging out, dying, a reload and a server stop all give it back; with a full
   inventory it drops at your feet.
 
-Every apply and remove charges XP levels and lapis, then pays the rewards below.
+Every apply and remove charges XP levels (and lapis, if `costs.lapis` is set; the default is none, as on
+Hypixel), then pays the rewards below.
 
 ## Bookshelf Power
 
@@ -90,7 +91,7 @@ for EcoSkills' Reimbursement and Overcompensation perks, whose effects only hook
 | Refund | From | Chance |
 | --- | --- | --- |
 | XP levels (Reimbursement) | Enchanting 10 | 0.5% per level from 10 (20.5% at 50) |
-| Lapis (Overcompensation) | Enchanting 20 | 0.75% per level from 20 (23.25% at 50) |
+| Lapis (Overcompensation) | Enchanting 20 | 0.75% per level from 20; off by default, since the table costs no lapis |
 
 Rewards (skill XP, job pay) are still given for a refunded enchant.
 

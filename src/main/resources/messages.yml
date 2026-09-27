@@ -11,7 +11,7 @@ reloaded: "&aRoyalEnchanting reloaded: &f%enchants%&a enchants in the table."
 books-not-allowed: "&cBooks can't be enchanted at the table."
 item-dropped: "&eYour inventory was full, so your item was dropped at your feet."
 
-applied: "&aYou enchanted your item with &d%enchant%&a for &3%xp% Exp Levels&a and &9%lapis% Lapis Lazuli&a."
+applied: "&aYou enchanted your item with &d%enchant%&a for &3%xp% Exp Levels&a."
 removed: "&aYou removed &d%enchant%&a from your item for &3%xp% Exp Levels&a and &9%lapis% Lapis Lazuli&a."
 
 fail-skill: "&cYou need &5Enchanting %required%&c for that enchantment."
@@ -111,7 +111,6 @@ gui:
     cost:
       - "&7Cost"
       - "&3%xp% Exp Levels"
-      - "&9%lapis% Lapis Lazuli"
     status-apply: "&eClick to enchant!"
     status-remove: "&eClick to remove!"
     status-no-xp: "&cNot enough Exp Levels!"
