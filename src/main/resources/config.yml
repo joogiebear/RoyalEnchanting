@@ -1,0 +1,67 @@
+# RoyalEnchanting
+# Right-clicking an enchanting table opens a menu where the player picks the enchant and level they want.
+# Which enchants are offered, and what each asks of the player, lives in enchants.yml.
+
+# Bookshelf Power is the number of bookshelves around the table, counted exactly like vanilla (one
+# block of air between shelf and table, on the table's level and the level above), capped here.
+bookshelf-power:
+  max: 20
+
+# What each level costs. The first entry is level I. The table offers as many levels as these lists
+# have entries (at most 10), so with five entries nothing goes above V.
+costs:
+  xp-levels: [5, 10, 15, 20, 30]
+  lapis: [1, 2, 3, 4, 5]
+
+# The skill whose level the requirements in enchants.yml ask for.
+skill:
+  id: enchanting
+  # Used only when the EcoSkills API can't be reached.
+  placeholder: "%ecoskills_enchanting%"
+
+# The vanilla EnchantItemEvent never fires for this table, so EcoSkills' and EcoJobs' own enchant_item
+# triggers don't either; these rewards stand in for them. Given after every successful apply AND
+# remove. Formulas are arithmetic (+ - * / ^, parentheses, min/max/floor/ceil/round/sqrt/abs) with
+# these placeholders, plus any PlaceholderAPI placeholder:
+#   %levels%         XP levels spent        %lapis%          lapis spent
+#   %enchant_level%  the level clicked      %job_level%      the player's level in the job below
+rewards:
+  skill-xp:
+    enabled: true
+    skill: enchanting
+    amount: "3.5 * %levels% ^ 1.5"
+    # true: EcoSkills' gainSkillXP (XP multipliers apply, as for normal XP gains); false: exact amount.
+    apply-multipliers: true
+  job:
+    enabled: true
+    id: enchanter
+    # Only pay players who have the job active, as the job itself does.
+    require-active: true
+    # Coins, through Vault.
+    money: "%levels% * %job_level% * 0.5"
+    # Job XP. The enchanter job levels up from enchanting, and without this it never would.
+    xp: "%levels% * 0.5"
+    # Used only when the EcoJobs API can't be reached.
+    level-placeholder: "%ecojobs_enchanter_level%"
+  # Extra console commands, run after the rewards above. Placeholders: %player%, %uuid%, %action%
+  # (apply/remove), %enchant% (id), %enchant_name%, %enchant_level%, %levels%, %lapis%, %job_level%,
+  # %skill_xp%, %job_money%, %job_xp%, and PlaceholderAPI.
+  commands: []
+
+# Extra enchants never to offer, whatever enchants.yml says. Fortune, Looting and Luck of the Sea are
+# always blocked and need not be listed.
+blocked-enchants: []
+
+# Cancel any vanilla enchanting screen that opens some other way (a command, another plugin), since
+# the vanilla table can roll Fortune.
+block-vanilla-table: true
+
+gui:
+  # Show each EcoEnchants enchant's description in the menu.
+  show-descriptions: true
+
+# Sound keys (namespaced, e.g. block.enchantment_table.use). Blank for none.
+sounds:
+  success: "block.enchantment_table.use"
+  fail: "entity.villager.no"
+  click: "ui.button.click"

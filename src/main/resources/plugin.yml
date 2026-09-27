@@ -1,0 +1,25 @@
+name: RoyalEnchanting
+version: ${project.version}
+main: com.mystipixel.royalenchanting.RoyalEnchantingPlugin
+api-version: '26.2'
+author: Mystipixel
+description: "${project.description}"
+# All optional. EcoEnchants first so its enchants are in the registry; the rest only feed rewards.
+softdepend:
+  - EcoEnchants
+  - EcoSkills
+  - EcoJobs
+  - PlaceholderAPI
+  - Vault
+commands:
+  royalenchanting:
+    description: RoyalEnchanting admin tools.
+    usage: /royalenchanting reload
+    aliases: [renchanting]
+permissions:
+  royalenchanting.use:
+    description: Use enchanting tables (the RoyalEnchanting menu).
+    default: true
+  royalenchanting.admin:
+    description: Reload RoyalEnchanting.
+    default: op
