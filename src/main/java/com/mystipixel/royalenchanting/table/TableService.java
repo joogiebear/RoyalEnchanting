@@ -176,11 +176,25 @@ public final class TableService {
         return RewardService.parseInt(hooks.placeholders(player, settings.skillPlaceholder())).orElse(0);
     }
 
-    private static final ItemStack PLAIN_LAPIS = new ItemStack(Material.LAPIS_LAZULI);
 
-    /** Plain lapis only: a custom item on a lapis base (enchanted lapis) is not spent as lapis. */
+    /**
+     * Lapis that isn't a custom item. A custom item on a lapis base (EcoItems' enchanted lapis) is not spent
+     * as lapis. Not {@code isSimilar(plain lapis)}: this server's item plugins (RoyalItems rarity rules)
+     * tag every vanilla item, so no lapis a player holds is ever identical to a fresh stack.
+     */
     private static boolean isLapis(ItemStack item) {
-        return item != null && item.getType() == Material.LAPIS_LAZULI && item.isSimilar(PLAIN_LAPIS);
+        if (item == null || item.getType() != Material.LAPIS_LAZULI) {
+            return false;
+        }
+        if (!item.hasItemMeta()) {
+            return true;
+        }
+        var meta = item.getItemMeta();
+        if (meta.hasCustomName() || meta.hasEnchantmentGlintOverride()) {
+            return false;
+        }
+        return meta.getPersistentDataContainer().getKeys().stream()
+                .noneMatch(k -> k.getNamespace().equals("ecoitems"));
     }
 
     public static int lapis(Player player) {
