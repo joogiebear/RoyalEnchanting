@@ -177,10 +177,12 @@ public final class TableService {
     }
 
 
+    private static final org.bukkit.NamespacedKey ROYALITEMS_ID = new org.bukkit.NamespacedKey("royalitems", "item_id");
+
     /**
-     * Lapis that isn't a custom item. A custom item on a lapis base (EcoItems' enchanted lapis) is not spent
-     * as lapis. Not {@code isSimilar(plain lapis)}: this server's item plugins (RoyalItems rarity rules)
-     * tag every vanilla item, so no lapis a player holds is ever identical to a fresh stack.
+     * Lapis that isn't a custom item on a lapis base (EcoItems' enchanted lapis is not spent as lapis).
+     * Names and lore don't decide it: RoyalItems dresses every vanilla item with a coloured name and lore
+     * and tags it {@code royalitems:item_id = lapis_lazuli}, so plain lapis never looks plain.
      */
     private static boolean isLapis(ItemStack item) {
         if (item == null || item.getType() != Material.LAPIS_LAZULI) {
@@ -189,12 +191,12 @@ public final class TableService {
         if (!item.hasItemMeta()) {
             return true;
         }
-        var meta = item.getItemMeta();
-        if (meta.hasCustomName() || meta.hasEnchantmentGlintOverride()) {
+        var pdc = item.getItemMeta().getPersistentDataContainer();
+        if (pdc.getKeys().stream().anyMatch(k -> k.getNamespace().equals("ecoitems"))) {
             return false;
         }
-        return meta.getPersistentDataContainer().getKeys().stream()
-                .noneMatch(k -> k.getNamespace().equals("ecoitems"));
+        String royalId = pdc.get(ROYALITEMS_ID, org.bukkit.persistence.PersistentDataType.STRING);
+        return royalId == null || royalId.equals("lapis_lazuli");
     }
 
     public static int lapis(Player player) {
