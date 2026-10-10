@@ -11,9 +11,8 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * One player's open table. The item being enchanted lives in {@link #input}, never only in the
- * inventory: the inventory is redrawn from this state, and every way the menu can end (close, quit,
- * death, reload, shutdown) hands {@code input} back exactly once via {@link #takeInput()}.
+ * One player's open table. The item lives in {@code input}, never only in the inventory, and every way
+ * the menu ends (close, quit, death, reload, shutdown) hands it back exactly once via {@link #takeInput()}.
  */
 public final class EnchantMenu implements InventoryHolder {
 
@@ -30,7 +29,7 @@ public final class EnchantMenu implements InventoryHolder {
     private String selected;
     private int page;
     private SortMode sort;
-    /** What each clickable slot does, rebuilt on every render. */
+    // rebuilt on every render
     final Map<Integer, String> entrySlots = new HashMap<>();
     final Map<Integer, Integer> levelSlots = new HashMap<>();
     boolean hasNextPage;

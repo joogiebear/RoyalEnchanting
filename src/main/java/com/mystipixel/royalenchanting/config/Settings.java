@@ -20,10 +20,7 @@ import java.util.logging.Logger;
 /** config.yml and enchants.yml, parsed once per load/reload. */
 public final class Settings {
 
-    /**
-     * Never offered, whatever enchants.yml says: the server's stat enchants replace them and they must
-     * not be obtainable from the table.
-     */
+    /** Never offered, whatever enchants.yml says: the server's stat enchants replace them. */
     public static final Set<NamespacedKey> ALWAYS_BLOCKED = Set.of(
             NamespacedKey.minecraft("fortune"),
             NamespacedKey.minecraft("looting"),
@@ -141,7 +138,7 @@ public final class Settings {
         return out;
     }
 
-    /** {@code harvesting} and {@code minecraft:harvesting} are the same key; anything else keeps its namespace. */
+    // "harvesting" and "minecraft:harvesting" are the same key; anything else keeps its namespace
     static NamespacedKey key(String raw) {
         if (raw == null || raw.isBlank()) {
             return null;

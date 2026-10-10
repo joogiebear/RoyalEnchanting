@@ -19,7 +19,6 @@ public final class LevelCheck {
         APPLY,
         /** The item already has exactly this level: clicking removes the enchant, for the same cost. */
         REMOVE,
-        /** Nothing can happen at this level. */
         NONE
     }
 
@@ -48,11 +47,7 @@ public final class LevelCheck {
                 && state.bookshelfPower() >= requirement.bookshelfPower();
     }
 
-    /**
-     * @param level        the level clicked, 1..tableMax
-     * @param currentLevel the enchant's level on the item now, 0 when absent
-     * @param tableMax     the highest level the table offers for this enchant
-     */
+    // level is 1..tableMax; currentLevel is 0 when the item lacks the enchant
     public static Result evaluate(int level, int currentLevel, int tableMax, CostTable costs,
                                   Requirement requirement, State state) {
         int xp = costs.xp(level);

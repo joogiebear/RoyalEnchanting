@@ -52,7 +52,6 @@ public final class RoyalEnchantingPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        // Every open table gives its item back before the server stops or the plugin reloads.
         if (menus != null) {
             menus.closeAll();
         }

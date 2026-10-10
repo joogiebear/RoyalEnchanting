@@ -30,7 +30,7 @@ class SettingsTest {
         return new Settings(resource("config.yml"), resource("enchants.yml"), LOG);
     }
 
-    /** The approved unlock table: id -> {Enchanting level, Bookshelf Power}. */
+    // the approved unlock table: id -> {Enchanting level, Bookshelf Power}
     private static final Map<String, int[]> APPROVED = new java.util.LinkedHashMap<>();
 
     static {

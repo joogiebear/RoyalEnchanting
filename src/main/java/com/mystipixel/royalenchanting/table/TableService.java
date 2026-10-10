@@ -28,14 +28,10 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 /**
- * The table's view of the world: which enchants go on an item, bookshelf power, and the player's skill,
- * XP and lapis.
+ * Which enchants go on an item, bookshelf power, and the player's skill, XP and lapis.
  *
- * <p>Everything about enchants goes through the Bukkit API. EcoEnchants (2026.38, checked with javap)
- * registers each of its enchants in the server's enchantment registry as {@code minecraft:<id>}, as an
- * {@code EcoEnchantsCraftEnchantment} whose {@code getMaxLevel()} is the config's max-level,
- * {@code conflictsWith()} uses the config's conflicts, and {@code canEnchantItem()} checks the enchant's
- * targets plus type limits, required enchants and conflicts against what the item already carries.
+ * <p>Enchants go through the Bukkit registry only: EcoEnchants (2026.38, checked with javap) registers its
+ * enchants as {@code minecraft:<id>}, with max level, conflicts and target checks taken from its config.
  */
 public final class TableService {
 
@@ -97,7 +93,7 @@ public final class TableService {
         return out;
     }
 
-    /** One of the item with every enchant taken off: "does this enchant fit this item at all". */
+    // one of the item with every enchant taken off: "does this enchant fit this item at all"
     private static ItemStack stripped(ItemStack item) {
         ItemStack bare = item.clone();
         bare.setAmount(1);
@@ -143,8 +139,6 @@ public final class TableService {
         return result;
     }
 
-    // ------------------------------------------------------------------ bookshelves
-
     public static int bookshelfPower(Block table, int maxPower) {
         return BookshelfCounter.power(new BookshelfCounter.Probe() {
             @Override
@@ -158,8 +152,6 @@ public final class TableService {
             }
         }, maxPower);
     }
-
-    // ------------------------------------------------------------------ the player
 
     public LevelCheck.State state(Player player, Settings settings, int power) {
         return new LevelCheck.State(skillLevel(player, settings), power, player.getLevel(), lapis(player));
@@ -179,11 +171,8 @@ public final class TableService {
 
     private static final org.bukkit.NamespacedKey ROYALITEMS_ID = new org.bukkit.NamespacedKey("royalitems", "item_id");
 
-    /**
-     * Lapis that isn't a custom item on a lapis base (EcoItems' enchanted lapis is not spent as lapis).
-     * Names and lore don't decide it: RoyalItems dresses every vanilla item with a coloured name and lore
-     * and tags it {@code royalitems:item_id = lapis_lazuli}, so plain lapis never looks plain.
-     */
+    // Not by name or lore: RoyalItems dresses plain lapis and tags it royalitems:item_id = lapis_lazuli,
+    // while EcoItems' enchanted lapis must not be spent as lapis.
     private static boolean isLapis(ItemStack item) {
         if (item == null || item.getType() != Material.LAPIS_LAZULI) {
             return false;
