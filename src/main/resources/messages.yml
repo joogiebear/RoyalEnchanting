@@ -82,7 +82,7 @@ gui:
       missing_first: "Missing first"
       a_to_z: "A to Z"
       z_to_a: "Z to A"
-    selected: "&b▶ %mode%"
+    selected: "&b> %mode%"
     unselected: "&7%mode%"
     click: "&eClick to switch sort!"
 

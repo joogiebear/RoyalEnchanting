@@ -17,12 +17,11 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 /**
- * What a successful apply or remove pays out. The vanilla EnchantItemEvent never fires for the table,
- * so EcoSkills' and EcoJobs' own {@code enchant_item} triggers don't either; this stands in for them.
+ * Pays out for an apply or remove. EnchantItemEvent never fires for this table, so EcoSkills' and
+ * EcoJobs' own {@code enchant_item} triggers don't either; this stands in for them.
  */
 public final class RewardService {
 
-    /** What happened at the table, for placeholders. */
     public record Enchanting(String action, String enchantId, String enchantName, int enchantLevel,
                              int levelsSpent, int lapisSpent) {
     }
@@ -94,7 +93,7 @@ public final class RewardService {
         }
     }
 
-    /** Only players with the job active are paid, like EcoJobs' own triggers (unless configured otherwise). */
+    // only players with the job active are paid, like EcoJobs' own triggers, unless configured otherwise
     private boolean jobApplies(Player player, Settings.JobReward job) {
         if (!job.requireActive()) {
             return true;

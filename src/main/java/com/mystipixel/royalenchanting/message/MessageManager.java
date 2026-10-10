@@ -13,9 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Player-facing text from {@code messages.yml}, including every GUI name and lore line. The copy in the
- * jar backs every key, so a server file missing a key (after an update) still shows sensible text; blank
- * text silences a chat message entirely.
+ * Player-facing text from {@code messages.yml}. The jar's copy backs every missing key; blank text
+ * silences a chat message.
  */
 public final class MessageManager {
 

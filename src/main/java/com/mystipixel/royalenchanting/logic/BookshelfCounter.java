@@ -5,27 +5,19 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Counts bookshelves around an enchanting table exactly the way vanilla does
- * ({@code EnchantingTableBlock.BOOKSHELF_OFFSETS} and {@code isValidBookShelf}).
- *
- * <p>The candidates are the outer ring of the 5x5 square centred on the table, on the table's own level
- * and the level above: every offset with x and z in [-2, 2], y in [0, 1] and |x| == 2 or |z| == 2, which
- * is 32 positions. A candidate counts when it is a power provider (a bookshelf) and the block halfway
- * between it and the table, at {@code (x / 2, y, z / 2)} with Java's truncating division, is a power
- * transmitter (air or another replaceable block). That is the one-block gap vanilla requires.
- *
- * <p>Vanilla caps the table at 15; this plugin caps power at a configurable maximum (20 by default).
+ * Counts bookshelves the way vanilla does ({@code EnchantingTableBlock.BOOKSHELF_OFFSETS}): the 32-block
+ * outer ring of the 5x5 square on the table's level and the one above, where the block halfway in,
+ * at {@code (x / 2, y, z / 2)} with truncating division, must be a transmitter (air or replaceable).
  */
 public final class BookshelfCounter {
 
-    /** What sits at an offset from the table. Coordinates are relative to the table block. */
+    /** What sits at an offset from the table, relative to the table block. */
     public interface Probe {
         boolean isProvider(int dx, int dy, int dz);
 
         boolean isTransmitter(int dx, int dy, int dz);
     }
 
-    /** The vanilla candidate offsets, each {dx, dy, dz}. */
     public static final List<int[]> OFFSETS;
 
     static {
@@ -56,7 +48,6 @@ public final class BookshelfCounter {
         return count;
     }
 
-    /** Bookshelf Power: the count, capped at {@code maxPower}. */
     public static int power(Probe probe, int maxPower) {
         return Math.max(0, Math.min(count(probe), maxPower));
     }

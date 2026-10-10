@@ -10,10 +10,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * An EcoEnchants enchant's description for a level, for the GUI lore. EcoEnchants' registered
- * {@code Enchantment} objects implement {@code EcoEnchantLike.getRawDescription(int, Player)}
- * (javap, EcoEnchants 2026.38); vanilla enchants don't, and get no description. Best effort: any failure
- * just means no description lines.
+ * EcoEnchants descriptions for the GUI lore, via {@code EcoEnchantLike.getRawDescription(int, Player)}
+ * (javap, EcoEnchants 2026.38). Best effort: vanilla enchants and any failure give no description.
  */
 public final class EnchantDescriptions {
 

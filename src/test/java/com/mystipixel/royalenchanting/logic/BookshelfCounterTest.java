@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class BookshelfCounterTest {
 
-    /** A tiny world around the table at 0,0,0: a set of shelf positions and a set of solid (non-air) blocks. */
+    // a tiny world around the table at 0,0,0: shelf positions and solid (non-air) blocks
     private static final class World implements BookshelfCounter.Probe {
         final Set<String> shelves = new HashSet<>();
         final Set<String> solid = new HashSet<>();

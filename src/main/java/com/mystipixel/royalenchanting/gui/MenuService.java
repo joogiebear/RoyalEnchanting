@@ -42,7 +42,7 @@ public final class MenuService {
     static final int CLOSE = 49;
     static final int SORT = 50;
     static final int NEXT = 53;
-    /** The enchant list: three rows of five, right of the item slot. */
+    // the enchant list: three rows of five, right of the item slot
     static final int[] GRID = {12, 13, 14, 15, 16, 21, 22, 23, 24, 25, 30, 31, 32, 33, 34};
     static final int[] LEVEL_ROWS = {21, 22, 23, 24, 25, 30, 31, 32, 33, 34};
 
@@ -74,8 +74,6 @@ public final class MenuService {
         return Optional.ofNullable(open.get(player.getUniqueId()));
     }
 
-    // ------------------------------------------------------------------ lifecycle
-
     public void open(Player player, Block tableBlock) {
         EnchantMenu previous = open.get(player.getUniqueId());
         if (previous != null) {
@@ -90,10 +88,7 @@ public final class MenuService {
         player.openInventory(inventory);
     }
 
-    /**
-     * Ends a menu and gives its item back: into the inventory, or at the player's feet when full (or when
-     * dead, so it lies with the rest of their drops). Safe to call more than once.
-     */
+    /** Gives the item back (at the player's feet when full or dead). Safe to call more than once. */
     public void finish(Player player, EnchantMenu menu) {
         open.remove(menu.owner(), menu);
         ItemStack item = menu.takeInput();
@@ -135,7 +130,6 @@ public final class MenuService {
         open.clear();
     }
 
-    /** After a reload: redraw with the new config. */
     public void refreshAll() {
         for (EnchantMenu menu : openMenus()) {
             Player player = Bukkit.getPlayer(menu.owner());
@@ -151,8 +145,6 @@ public final class MenuService {
     public void forget(UUID player) {
         sortChoice.remove(player);
     }
-
-    // ------------------------------------------------------------------ clicks
 
     void clickTop(Player player, EnchantMenu menu, int slot, boolean shift) {
         if (slot == INPUT) {
@@ -195,7 +187,6 @@ public final class MenuService {
         }
     }
 
-    /** The item slot: put the cursor's item in, or take the item out (to the cursor, or the inventory on shift). */
     private void clickInput(Player player, EnchantMenu menu, boolean shift) {
         ItemStack cursor = player.getItemOnCursor();
         boolean cursorEmpty = cursor.getType().isAir();
@@ -232,7 +223,6 @@ public final class MenuService {
         resync(player);
     }
 
-    /** Shift-click in the player's inventory: move one of that item into the table. */
     void insertFromInventory(Player player, EnchantMenu menu, Inventory from, int slot) {
         ItemStack item = from.getItem(slot);
         if (item == null || item.getType().isAir()) {
@@ -262,7 +252,7 @@ public final class MenuService {
         resync(player);
     }
 
-    /** Resend inventory state after a cancelled click has been answered; never moves items itself. */
+    // next tick, once the cancelled click has been answered; never moves items itself
     private void resync(Player player) {
         Bukkit.getScheduler().runTask(plugin, () -> {
             if (player.isOnline()) {
@@ -270,8 +260,6 @@ public final class MenuService {
             }
         });
     }
-
-    // ------------------------------------------------------------------ enchanting
 
     private void enchant(Player player, EnchantMenu menu, int level) {
         Settings settings = settings();
@@ -325,7 +313,7 @@ public final class MenuService {
         render(player, menu);
     }
 
-    /** The Reimbursement and Overcompensation perks: a chance, by Enchanting level, to get the cost back. */
+    // Reimbursement and Overcompensation perks: a chance, by Enchanting level, to get the cost back
     private void refund(Player player, Settings settings, int skillLevel, int xp, int lapis) {
         var random = java.util.concurrent.ThreadLocalRandom.current();
         try {
@@ -370,8 +358,6 @@ public final class MenuService {
         }
         return null;
     }
-
-    // ------------------------------------------------------------------ drawing
 
     void render(Player player, EnchantMenu menu) {
         if (menu.table().getType() != Material.ENCHANTING_TABLE) {
@@ -465,7 +451,7 @@ public final class MenuService {
         }
     }
 
-    /** Up to five levels sit centred on the middle row; six to ten fill it and the row below. */
+    // up to five levels sit centred on the middle row; six to ten fill it and the row below
     static int[] levelSlots(int levels) {
         int n = Math.max(0, Math.min(levels, LEVEL_ROWS.length));
         int[] out = new int[n];
@@ -589,7 +575,7 @@ public final class MenuService {
         return out;
     }
 
-    /** A conflicting enchant's name: from enchants.yml when it's a table enchant, else from its id. */
+    // a conflicting enchant's name: from enchants.yml when it's a table enchant, else from its id
     private String enchantName(Enchantment enchantment) {
         for (TableEntry entry : settings().entries().values()) {
             if (entry.key().equals(enchantment.getKey())) {
@@ -639,8 +625,6 @@ public final class MenuService {
         item.setItemMeta(meta);
         return item;
     }
-
-    // ------------------------------------------------------------------ sounds
 
     private void click(Player player) {
         sound(player, settings().sounds().click());

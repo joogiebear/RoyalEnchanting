@@ -35,10 +35,7 @@ public final class MenuListener implements Listener {
         this.menus = menus;
     }
 
-    // ------------------------------------------------------------------ opening
-
-    // HIGH, so protection plugins (island and region permissions) have already denied the interaction
-    // where the player may not use this table; a denied interaction is left alone.
+    // HIGH, so protection plugins have already denied the interaction where the player may not use this table.
     @EventHandler(priority = EventPriority.HIGH)
     public void onInteract(PlayerInteractEvent event) {
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK) {
@@ -69,7 +66,7 @@ public final class MenuListener implements Listener {
         menus.open(player, block);
     }
 
-    /** A vanilla enchanting screen reached any other way would hand out Fortune: never let one open. */
+    // a vanilla enchanting screen reached any other way would hand out Fortune
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onVanillaOpen(InventoryOpenEvent event) {
         if (event.getInventory().getType() == InventoryType.ENCHANTING && plugin.settings().blockVanillaTable()) {
@@ -77,10 +74,7 @@ public final class MenuListener implements Listener {
         }
     }
 
-    // ------------------------------------------------------------------ clicks
-
-    // HIGHEST: this decides the click's final cancelled state, so no later listener can let vanilla move
-    // items in or out of the menu uncontrolled.
+    // HIGHEST: decides the final cancelled state, so no later listener can let vanilla move items across.
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onClick(InventoryClickEvent event) {
         if (!(event.getInventory().getHolder(false) instanceof EnchantMenu menu)) {
@@ -101,8 +95,8 @@ public final class MenuListener implements Listener {
             }
             return;
         }
-        // The player's own inventory. Shift-click moves one item into the table; double-click collect,
-        // hotbar swaps and the like could pull items across the boundary, so they are blocked.
+        // Own inventory: shift-click moves one item in; double-click collect and hotbar swaps could pull
+        // items across the boundary, so they are blocked.
         if (click == ClickType.SHIFT_LEFT || click == ClickType.SHIFT_RIGHT) {
             event.setCancelled(true);
             if (clicked != null) {
@@ -131,8 +125,6 @@ public final class MenuListener implements Listener {
         }
     }
 
-    // ------------------------------------------------------------------ never lose the item
-
     @EventHandler(priority = EventPriority.MONITOR)
     public void onClose(InventoryCloseEvent event) {
         if (event.getInventory().getHolder(false) instanceof EnchantMenu menu
@@ -141,8 +133,7 @@ public final class MenuListener implements Listener {
         }
     }
 
-    // Quit also closes the inventory, but the item is handed back here first so it is certainly in the
-    // inventory when the player's data is saved.
+    // hand the item back before quit's own close, so it is in the inventory when player data is saved
     @EventHandler(priority = EventPriority.LOWEST)
     public void onQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
@@ -150,8 +141,8 @@ public final class MenuListener implements Listener {
         menus.forget(player.getUniqueId());
     }
 
-    // MONITOR, once keepInventory is final. The item is dropped into the world directly rather than added
-    // to the drop list, which later listeners (graves, keep-inventory perks) are free to clear.
+    // MONITOR, once keepInventory is final. Dropped directly rather than via the drop list, which later
+    // listeners (graves, keep-inventory perks) may clear.
     @EventHandler(priority = EventPriority.MONITOR)
     public void onDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
