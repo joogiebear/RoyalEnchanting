@@ -99,10 +99,10 @@ gui:
 
   requirements:
     header: "&7Requirements:"
-    skill-met: " &a+ &7Enchanting &5%required%"
-    skill-missing: " &c- &7Enchanting &5%required% &8(you: %current%)"
-    power-met: " &a+ &d%required% &7Bookshelf Power"
-    power-missing: " &c- &d%required% &7Bookshelf Power &8(table: %current%)"
+    skill-met: " &a✔ &7Enchanting &5%required%"
+    skill-missing: " &c✖ &7Enchanting &5%required% &8(you: %current%)"
+    power-met: " &a✔ &d%required% &7Bookshelf Power"
+    power-missing: " &c✖ &d%required% &7Bookshelf Power &8(table: %current%)"
 
   level:
     name: "&9%enchant% %level%"
