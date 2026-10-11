@@ -3,6 +3,7 @@ package com.mystipixel.royalenchanting.reward;
 import com.mystipixel.royalenchanting.config.Settings;
 import com.mystipixel.royalenchanting.hook.EcoJobsHook;
 import com.mystipixel.royalenchanting.hook.EcoSkillsHook;
+import com.mystipixel.royalenchanting.hook.EconGuardHook;
 import com.mystipixel.royalenchanting.hook.Hooks;
 import com.mystipixel.royalenchanting.logic.Expression;
 import com.mystipixel.royalenchanting.logic.Placeholders;
@@ -73,6 +74,11 @@ public final class RewardService {
                 values.put("job_money", Placeholders.number(money));
                 if (!hooks.deposit(player, money)) {
                     reportOnce("vault", "No Vault economy accepted the enchanter job pay; it was not paid.");
+                } else {
+                    EconGuardHook econGuard = hooks.econGuard();
+                    if (econGuard != null) {
+                        econGuard.reportJobPay(player.getUniqueId(), player.getName(), money);
+                    }
                 }
             }
             Double xp = evaluate(player, "rewards.job.xp", job.xp(), values);

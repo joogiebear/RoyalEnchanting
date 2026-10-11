@@ -19,6 +19,7 @@ public final class Hooks {
     private final Logger log;
     private EcoSkillsHook skills;
     private EcoJobsHook jobs;
+    private EconGuardHook econGuard;
     private boolean papi;
     private boolean vault;
 
@@ -29,10 +30,12 @@ public final class Hooks {
     public void detect() {
         this.skills = EcoSkillsHook.create(log);
         this.jobs = EcoJobsHook.create(log);
+        this.econGuard = EconGuardHook.create(log);
         this.papi = Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI");
         this.vault = Bukkit.getPluginManager().isPluginEnabled("Vault");
         log.info("Hooks: EcoSkills " + state(skills != null) + ", EcoJobs " + state(jobs != null)
                 + ", PlaceholderAPI " + state(papi) + ", Vault " + state(vault)
+                + ", EconGuard " + state(econGuard != null)
                 + ", EcoEnchants " + state(Bukkit.getPluginManager().isPluginEnabled("EcoEnchants")));
     }
 
@@ -46,6 +49,10 @@ public final class Hooks {
 
     public EcoJobsHook jobs() {
         return jobs;
+    }
+
+    public EconGuardHook econGuard() {
+        return econGuard;
     }
 
     public boolean hasPlaceholderApi() {
