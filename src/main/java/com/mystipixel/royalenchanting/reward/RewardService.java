@@ -17,8 +17,8 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 /**
- * Pays out for an apply or remove. EnchantItemEvent never fires for this table, so EcoSkills' and
- * EcoJobs' own {@code enchant_item} triggers don't either; this stands in for them.
+ * Pays out for an apply. EnchantItemEvent never fires for this table, so EcoSkills' and EcoJobs' own
+ * {@code enchant_item} triggers don't either; this stands in for them.
  */
 public final class RewardService {
 
@@ -37,7 +37,11 @@ public final class RewardService {
         this.hooks = hooks;
     }
 
-    public void reward(Player player, Settings settings, Enchanting what) {
+    /**
+     * Pays the skill and job rewards when {@code pays} is true, then runs the configured commands either
+     * way. With {@code pays} false the %skill_xp%, %job_money% and %job_xp% placeholders are 0.
+     */
+    public void reward(Player player, Settings settings, Enchanting what, boolean pays) {
         Map<String, String> values = new LinkedHashMap<>();
         values.put("player", player.getName());
         values.put("uuid", player.getUniqueId().toString());
@@ -51,7 +55,7 @@ public final class RewardService {
 
         values.put("skill_xp", "0");
         Settings.SkillReward skill = settings.skillReward();
-        if (skill.enabled()) {
+        if (pays && skill.enabled()) {
             Double xp = evaluate(player, "rewards.skill-xp.amount", skill.amount(), values);
             if (xp != null && xp > 0) {
                 values.put("skill_xp", Placeholders.number(xp));
@@ -67,7 +71,7 @@ public final class RewardService {
         values.put("job_money", "0");
         values.put("job_xp", "0");
         Settings.JobReward job = settings.jobReward();
-        if (job.enabled() && jobApplies(player, job)) {
+        if (pays && job.enabled() && jobApplies(player, job)) {
             Double money = evaluate(player, "rewards.job.money", job.money(), values);
             if (money != null && money > 0) {
                 values.put("job_money", Placeholders.number(money));

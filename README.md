@@ -39,7 +39,7 @@ ones share one table. Part of the Royal plugin suite.
   inventory it drops at your feet.
 
 Every apply and remove charges XP levels (and lapis, if `costs.lapis` is set; the default is none, as on
-Hypixel), then pays the rewards below.
+Hypixel). An apply then pays the rewards below.
 
 ## Bookshelf Power
 
@@ -68,7 +68,8 @@ enchanting screen is also cancelled if anything else tries to open it (`block-va
 ## Rewards
 
 The vanilla `EnchantItemEvent` never fires for this table, so the `enchant_item` triggers EcoSkills and
-EcoJobs normally react to don't either. After every successful apply or remove the plugin pays instead:
+EcoJobs normally react to don't either. The plugin pays instead when an apply raises an enchant above the
+highest level that item has already been paid for:
 
 | Reward | Default | Through |
 |---|---|---|
@@ -77,6 +78,9 @@ EcoJobs normally react to don't either. After every successful apply or remove t
 | Enchanter job XP | `%levels% * 0.5` | EcoJobs API |
 
 `%levels%` is the XP levels spent. Job rewards go only to players with the `enchanter` job active.
+Removing an enchant pays nothing, and the item remembers the highest level it was paid for (in its
+persistent data, through removes), so removing Sharpness I and putting it back pays nothing again, while
+going on to Sharpness II does pay. The extra commands still run on every apply and remove.
 Every formula, the skill and job ids, and a list of extra console commands are in `config.yml`.
 Formulas take `+ - * / ^`, parentheses, `min max floor ceil round sqrt abs`, the placeholders listed
 there and any PlaceholderAPI placeholder.

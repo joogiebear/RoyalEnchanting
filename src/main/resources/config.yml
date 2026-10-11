@@ -20,8 +20,9 @@ skill:
   placeholder: "%ecoskills_enchanting%"
 
 # The vanilla EnchantItemEvent never fires for this table, so EcoSkills' and EcoJobs' own enchant_item
-# triggers don't either; these rewards stand in for them. Given after every successful apply AND
-# remove. Formulas are arithmetic (+ - * / ^, parentheses, min/max/floor/ceil/round/sqrt/abs) with
+# triggers don't either; these rewards stand in for them. Given when an apply raises an enchant above
+# the highest level the item has already been paid for, so removing and re-applying earns nothing.
+# Removing never pays. Formulas are arithmetic (+ - * / ^, parentheses, min/max/floor/ceil/round/sqrt/abs) with
 # these placeholders, plus any PlaceholderAPI placeholder:
 #   %levels%         XP levels spent        %lapis%          lapis spent
 #   %enchant_level%  the level clicked      %job_level%      the player's level in the job below
@@ -43,7 +44,8 @@ rewards:
     xp: "%levels% * 0.5"
     # Used only when the EcoJobs API can't be reached.
     level-placeholder: "%ecojobs_enchanter_level%"
-  # Extra console commands, run after the rewards above. Placeholders: %player%, %uuid%, %action%
+  # Extra console commands, run after every apply and remove, paid or not (%skill_xp%, %job_money% and
+  # %job_xp% are 0 when nothing was paid). Placeholders: %player%, %uuid%, %action%
   # (apply/remove), %enchant% (id), %enchant_name%, %enchant_level%, %levels%, %lapis%, %job_level%,
   # %skill_xp%, %job_money%, %job_xp%, and PlaceholderAPI.
   commands: []

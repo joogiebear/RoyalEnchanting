@@ -42,6 +42,14 @@ public final class LevelCheck {
     private LevelCheck() {
     }
 
+    /**
+     * Whether a successful click pays the skill and job rewards. Only an apply above the highest level of
+     * this enchant the item has already been paid for does, so removing and re-applying earns nothing.
+     */
+    public static boolean paysRewards(Action action, int level, int highestRewarded) {
+        return action == Action.APPLY && level > highestRewarded;
+    }
+
     public static boolean unlocked(Requirement requirement, State state) {
         return state.skillLevel() >= requirement.skillLevel()
                 && state.bookshelfPower() >= requirement.bookshelfPower();

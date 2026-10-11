@@ -298,6 +298,12 @@ public final class MenuService {
             return;
         }
 
+        boolean pays = LevelCheck.paysRewards(result.action(), level,
+                TableService.rewardedLevel(changed, entry.key()));
+        if (pays) {
+            TableService.markRewarded(changed, entry.key(), level);
+        }
+
         player.giveExpLevels(-result.xpCost());
         TableService.takeLapis(player, result.lapisCost());
         menu.setInput(changed);
@@ -309,7 +315,7 @@ public final class MenuService {
                 "xp", Integer.toString(result.xpCost()), "lapis", Integer.toString(result.lapisCost()));
         sound(player, settings.sounds().success());
         plugin.rewards().reward(player, settings, new RewardService.Enchanting(apply ? "apply" : "remove",
-                entry.id(), entry.name(), level, result.xpCost(), result.lapisCost()));
+                entry.id(), entry.name(), level, result.xpCost(), result.lapisCost()), pays);
         render(player, menu);
     }
 
