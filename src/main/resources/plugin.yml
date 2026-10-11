@@ -11,6 +11,7 @@ softdepend:
   - EcoJobs
   - PlaceholderAPI
   - Vault
+  - EconGuard
 commands:
   royalenchanting:
     description: RoyalEnchanting admin tools.

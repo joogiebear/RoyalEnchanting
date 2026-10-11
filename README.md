@@ -169,6 +169,9 @@ All optional; the plugin soft-depends on each.
   API can't be reached, the skill level and job level fall back to the PlaceholderAPI placeholders in
   `config.yml`, and the rewards that need the API are skipped with one warning.
 - **Vault** pays the job money. **PlaceholderAPI** placeholders work in formulas and commands.
+- **EconGuard**, when installed, gets every enchanter job payment as incoming money (source `other`,
+  action `enchanting_job`), like the Bazaar and Auction House report theirs. If the report fails, the
+  pay still goes through.
 
 The startup log lists which integrations were found.
 
