@@ -10,6 +10,7 @@ import com.mystipixel.royalenchanting.reward.RewardService;
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Registry;
 import org.bukkit.Tag;
 import org.bukkit.block.Block;
@@ -17,6 +18,9 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -137,6 +141,35 @@ public final class TableService {
         ItemStack result = item.clone();
         result.removeEnchantment(enchantment);
         return result;
+    }
+
+    // enchant key -> highest level the table has paid rewards for on this item; kept through removes
+    private static final NamespacedKey REWARDED = new NamespacedKey("royalenchanting", "rewarded");
+
+    /** The highest level of {@code enchant} this item has earned rewards for at the table, 0 if none. */
+    public static int rewardedLevel(ItemStack item, NamespacedKey enchant) {
+        if (!item.hasItemMeta()) {
+            return 0;
+        }
+        PersistentDataContainer rewarded = item.getItemMeta().getPersistentDataContainer()
+                .get(REWARDED, PersistentDataType.TAG_CONTAINER);
+        if (rewarded == null) {
+            return 0;
+        }
+        Integer level = rewarded.get(enchant, PersistentDataType.INTEGER);
+        return level == null ? 0 : level;
+    }
+
+    public static void markRewarded(ItemStack item, NamespacedKey enchant, int level) {
+        ItemMeta meta = item.getItemMeta();
+        PersistentDataContainer pdc = meta.getPersistentDataContainer();
+        PersistentDataContainer rewarded = pdc.get(REWARDED, PersistentDataType.TAG_CONTAINER);
+        if (rewarded == null) {
+            rewarded = pdc.getAdapterContext().newPersistentDataContainer();
+        }
+        rewarded.set(enchant, PersistentDataType.INTEGER, level);
+        pdc.set(REWARDED, PersistentDataType.TAG_CONTAINER, rewarded);
+        item.setItemMeta(meta);
     }
 
     public static int bookshelfPower(Block table, int maxPower) {
