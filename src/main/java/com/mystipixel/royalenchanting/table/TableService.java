@@ -151,7 +151,8 @@ public final class TableService {
         if (!item.hasItemMeta()) {
             return 0;
         }
-        PersistentDataContainer rewarded = item.getItemMeta().getPersistentDataContainer()
+        // the read-only view avoids a full meta copy
+        PersistentDataContainer rewarded = item.getPersistentDataContainer()
                 .get(REWARDED, PersistentDataType.TAG_CONTAINER);
         if (rewarded == null) {
             return 0;
@@ -213,9 +214,12 @@ public final class TableService {
         if (!item.hasItemMeta()) {
             return true;
         }
-        var pdc = item.getItemMeta().getPersistentDataContainer();
-        if (pdc.getKeys().stream().anyMatch(k -> k.getNamespace().equals("ecoitems"))) {
-            return false;
+        // the read-only view: this runs for every inventory slot on every menu render
+        var pdc = item.getPersistentDataContainer();
+        for (org.bukkit.NamespacedKey key : pdc.getKeys()) {
+            if (key.getNamespace().equals("ecoitems")) {
+                return false;
+            }
         }
         String royalId = pdc.get(ROYALITEMS_ID, org.bukkit.persistence.PersistentDataType.STRING);
         return royalId == null || royalId.equals("lapis_lazuli");
